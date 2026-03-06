@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seeds — Food Studio Paris</title>
+  <link rel="icon" type="image/png" href="favicon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Jost:wght@200;300;400&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Palette extraite du logo Seeds */
+      --beige:    #E8D5B7;   /* fond logo */
+      --cream:    #F2EBD9;   /* crème très clair */
+      --warm:     #DFC9A8;   /* beige moyen */
+      --rust:     #9B4C15;   /* roux moyen */
+      --brown:    #714424;   /* brun principal logo */
+      --dark:     #3D1F08;   /* brun foncé */
+      --ink:      #2C1506;   /* quasi-noir brun */
+      --white:    #FAF7F2;   /* blanc chaud */
+
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --sans:  'Jost', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--white);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-weight: 300;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--cream); }
+    ::-webkit-scrollbar-thumb { background: var(--warm); border-radius: 2px; }
+
+    /* ── NAV ─────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.8rem 3.5rem;
+      background: rgba(242,235,217,0.95);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(113,68,36,0.12);
+      transition: background 0.4s;
+    }
+    nav.scrolled {
+      background: rgba(242,235,217,0.98);
+    }
+
+    .nav-logo {
+      display: block; line-height: 0; text-decoration: none;
+    }
+    .nav-logo { position: relative; width: 90px; height: 90px; display: block; line-height: 0; text-decoration: none; }
+    .nav-logo img {
+      height: 90px; width: auto;
+      transition: opacity 0.4s;
+      position: absolute;
+      top: 0; left: 0;
+    }
+    .nav-logo img.logo-light { opacity: 0; }
+    .nav-logo img.logo-dark  { opacity: 1; }
+
+    .nav-links {
+      display: flex; gap: 2.8rem; list-style: none;
+    }
+    .nav-links a {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dark);
+      text-decoration: none;
+      position: relative;
+      padding-bottom: 2px;
+      transition: color 0.4s;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 100%;
+      height: 1px; background: currentColor;
+      transition: right 0.35s ease;
+    }
+    .nav-links a:hover::after { right: 0; }
+
+    /* ── HERO ────────────────────────────────────── */
+    #hero {
+      position: relative;
+      height: 100vh;
+      min-height: 700px;
+      overflow: hidden;
+      display: flex; align-items: flex-end;
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-image: url('img-hero.jpg');
+      background-size: cover;
+      background-position: center 30%;
+      transform: scale(1.04);
+      transition: transform 8s ease-out;
+    }
+    .hero-bg.loaded { transform: scale(1); }
+
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: rgba(44,21,6,0.62);
+    }
+
+    .hero-content {
+      position: relative; z-index: 2;
+      padding: 0 3.5rem 5rem;
+      color: var(--cream);
+      max-width: 900px;
+    }
+
+    .hero-label {
+      font-family: var(--sans);
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--cream);
+      display: flex; align-items: center; gap: 1.2rem;
+      margin-bottom: 1.8rem;
+      opacity: 0; animation: fadeUp 1s 0.3s forwards;
+    }
+    .hero-label::before {
+      content: ''; display: block;
+      width: 36px; height: 1px; background: var(--cream);
+    }
+
+    .hero-title {
+      font-family: var(--serif);
+      font-size: clamp(3.2rem, 6vw, 6.5rem);
+      font-weight: 300;
+      line-height: 1.0;
+      letter-spacing: -0.01em;
+      margin-bottom: 2rem;
+      opacity: 0; animation: fadeUp 1s 0.55s forwards;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--cream);
+    }
+
+    .hero-sub {
+      font-size: 0.88rem;
+      line-height: 1.8;
+      color: rgba(250,247,242,0.9);
+      max-width: 44ch;
+      margin-bottom: 3rem;
+      opacity: 0; animation: fadeUp 1s 0.8s forwards;
+    }
+
+    .hero-cta {
+      display: inline-flex; align-items: center; gap: 1rem;
+      font-family: var(--sans);
+      font-size: 0.68rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--cream);
+      text-decoration: none;
+      opacity: 0; animation: fadeUp 1s 1s forwards;
+      border: 1px solid rgba(232,213,183,0.4);
+      padding: 1rem 1.8rem;
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .hero-cta:hover {
+      background: rgba(232,213,183,0.12);
+      border-color: var(--beige);
+    }
+
+    .hero-scroll {
+      position: absolute; right: 3.5rem; bottom: 5rem;
+      display: flex; flex-direction: column; align-items: center; gap: 1rem;
+      opacity: 0; animation: fadeIn 1s 1.5s forwards;
+    }
+    .hero-scroll span {
+      font-family: var(--sans);
+      font-size: 0.6rem; letter-spacing: 0.25em;
+      text-transform: uppercase; color: var(--warm);
+      writing-mode: vertical-rl;
+    }
+    .hero-scroll-line {
+      width: 1px; height: 48px;
+      background: linear-gradient(to bottom, transparent, var(--warm));
+    }
+
+    /* ── MARQUEE ─────────────────────────────────── */
+    .marquee-wrap {
+      overflow: hidden;
+      background: var(--brown);
+      padding: 1rem 0;
+    }
+    .marquee-track {
+      display: flex; gap: 0;
+      animation: marquee 28s linear infinite;
+      width: max-content;
+    }
+    .marquee-item {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--beige);
+      white-space: nowrap;
+      padding: 0 2.5rem;
+      border-right: 1px solid rgba(232,213,183,0.2);
+    }
+
+    /* ── SECTION COMMONS ──────────────────────────── */
+    section { padding: 9rem 3.5rem; }
+
+    .label {
+      font-family: var(--sans);
+      font-size: 0.63rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--rust);
+      display: flex; align-items: center; gap: 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+    .label::before {
+      content: ''; display: block;
+      width: 28px; height: 1px; background: var(--rust);
+    }
+
+    .heading {
+      font-family: var(--serif);
+      font-size: clamp(2.4rem, 3.8vw, 4rem);
+      font-weight: 300;
+      line-height: 1.1;
+      color: var(--dark);
+    }
+    .heading em { font-style: italic; color: var(--brown); }
+
+    /* ── SERVICES ────────────────────────────────── */
+    #services {
+      background: var(--cream);
+    }
+    .services-header {
+      max-width: 640px;
+      margin-bottom: 5rem;
+    }
+    .services-header .heading { margin-bottom: 1.2rem; }
+    .services-header p {
+      font-size: 0.9rem; line-height: 1.85;
+      color: var(--brown); max-width: 48ch;
+      margin-top: 1.2rem;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(113,68,36,0.12);
+    }
+    .service-item {
+      background: var(--cream);
+      padding: 3rem 2.5rem;
+      transition: background 0.3s;
+    }
+    .service-item:hover { background: var(--white); }
+
+    .service-num {
+      font-family: var(--serif);
+      font-size: 0.8rem;
+      color: var(--rust);
+      letter-spacing: 0.1em;
+      margin-bottom: 1.5rem;
+    }
+    .service-title {
+      font-family: var(--serif);
+      font-size: 1.45rem;
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--dark);
+      margin-bottom: 1rem;
+    }
+    .service-desc {
+      font-size: 0.82rem;
+      line-height: 1.8;
+      color: var(--brown);
+    }
+
+    /* ── WORK ────────────────────────────────────── */
+    #work { background: var(--white); }
+
+    .work-intro {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 4rem;
+      gap: 3rem;
+    }
+    .work-intro p {
+      font-size: 0.88rem; line-height: 1.8;
+      color: var(--brown); max-width: 38ch;
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: auto;
+      gap: 1.5rem;
+    }
+
+    .proj { position: relative; overflow: hidden; }
+    .proj-1 { grid-column: 1 / 6; grid-row: 1; }
+    .proj-2 { grid-column: 6 / 13; grid-row: 1; }
+    .proj-3 { grid-column: 1 / 8; grid-row: 2; }
+    .proj-accent { grid-column: 8 / 13; grid-row: 2; }
+
+    .proj-img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.8s cubic-bezier(.25,.46,.45,.94);
+      min-height: 420px;
+    }
+    .proj-accent .proj-img { min-height: 280px; }
+
+    .proj:hover .proj-img { transform: scale(1.04); }
+
+    .proj-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(44,21,6,0.75) 0%, transparent 55%);
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 2.5rem;
+      color: var(--cream);
+    }
+    .proj-accent .proj-overlay {
+      background: var(--brown);
+      position: relative; inset: auto;
+      padding: 2.5rem;
+      display: flex; flex-direction: column; justify-content: center;
+      min-height: 280px;
+    }
+
+    .proj-tag {
+      font-family: var(--sans);
+      font-size: 0.6rem; letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--beige);
+      opacity: 0.7;
+      margin-bottom: 0.6rem;
+    }
+    .proj-accent .proj-tag { opacity: 0.6; }
+
+    .proj-title {
+      font-family: var(--serif);
+      font-size: 1.55rem;
+      font-weight: 300;
+      line-height: 1.15;
+    }
+    .proj-accent .proj-title { font-size: 1.3rem; }
+
+    .proj-link {
+      display: inline-flex; align-items: center; gap: 0.8rem;
+      margin-top: 1rem;
+      font-family: var(--sans);
+      font-size: 0.62rem; letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--beige);
+      text-decoration: none;
+      opacity: 0; transform: translateY(6px);
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    .proj:hover .proj-link { opacity: 1; transform: translateY(0); }
+    .proj-link-line {
+      width: 24px; height: 1px; background: var(--beige);
+      transition: width 0.3s;
+    }
+    .proj-link:hover .proj-link-line { width: 40px; }
+
+    /* ── ABOUT ───────────────────────────────────── */
+    #about {
+      background: var(--cream);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7rem;
+      align-items: center;
+    }
+
+    .about-visual { position: relative; }
+    .about-img {
+      width: 100%; aspect-ratio: 3/4;
+      object-fit: cover; object-position: top center;
+      display: block;
+    }
+    .about-badge {
+      position: absolute;
+      bottom: -2rem; right: -2.5rem;
+      background: var(--brown);
+      color: var(--beige);
+      padding: 2rem 2.2rem;
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      max-width: 240px;
+    }
+
+    .about-text .heading { margin-bottom: 1.8rem; margin-top: 0.5rem; }
+    .about-body {
+      font-size: 0.88rem; line-height: 1.9;
+      color: var(--brown); margin-bottom: 1.5rem;
+    }
+
+    .skills {
+      margin-top: 2.5rem;
+      display: grid; grid-template-columns: 1fr 1fr;
+      border-top: 1px solid rgba(113,68,36,0.2);
+    }
+    .skill {
+      padding: 1.2rem 0;
+      border-bottom: 1px solid rgba(113,68,36,0.2);
+      font-family: var(--sans);
+      font-size: 0.78rem;
+      color: var(--dark);
+      display: flex; align-items: center; gap: 0.9rem;
+    }
+    .skill:nth-child(odd) { border-right: 1px solid rgba(113,68,36,0.2); padding-right: 1.5rem; }
+    .skill:nth-child(even) { padding-left: 1.5rem; }
+    .skill::before {
+      content: ''; display: block;
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--rust); flex-shrink: 0;
+    }
+
+    /* ── CONTACT ─────────────────────────────────── */
+    #contact {
+      background: var(--ink);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7rem;
+      align-items: start;
+    }
+    #contact .label { color: var(--warm); }
+    #contact .label::before { background: var(--warm); }
+    #contact .heading { color: var(--cream); margin-bottom: 1.5rem; margin-top: 0.5rem; }
+
+    .contact-body {
+      font-size: 0.88rem; line-height: 1.9;
+      color: rgba(232,213,183,0.6);
+      margin-bottom: 3rem;
+    }
+    .contact-links { display: flex; flex-direction: column; gap: 1.2rem; }
+    .contact-link {
+      display: flex; align-items: center; gap: 1.2rem;
+      font-size: 0.75rem; letter-spacing: 0.1em;
+      color: var(--warm); text-decoration: none;
+      transition: color 0.25s;
+    }
+    .contact-link:hover { color: var(--cream); }
+    .contact-link-line {
+      width: 28px; height: 1px; background: rgba(113,68,36,0.5);
+      transition: width 0.35s, background 0.25s;
+    }
+    .contact-link:hover .contact-link-line { width: 48px; background: var(--warm); }
+
+    .contact-form { display: flex; flex-direction: column; gap: 2rem; }
+    .form-field { display: flex; flex-direction: column; gap: 0.5rem; }
+    .form-label {
+      font-size: 0.62rem; letter-spacing: 0.28em;
+      text-transform: uppercase; color: var(--warm);
+      opacity: 0.7;
+    }
+    .form-input, .form-textarea {
+      background: transparent;
+      border: none; border-bottom: 1px solid rgba(232,213,183,0.2);
+      padding: 0.75rem 0;
+      font-family: var(--sans); font-size: 0.88rem;
+      color: var(--cream); outline: none;
+      transition: border-color 0.25s; width: 100%;
+    }
+    .form-input::placeholder, .form-textarea::placeholder { color: rgba(232,213,183,0.25); }
+    .form-input:focus, .form-textarea:focus { border-bottom-color: var(--warm); }
+    .form-textarea { resize: none; min-height: 90px; }
+
+    .form-btn {
+      display: inline-flex; align-items: center; gap: 0.9rem;
+      background: none;
+      border: 1px solid rgba(232,213,183,0.25);
+      color: var(--cream);
+      padding: 1rem 2rem;
+      font-family: var(--sans); font-size: 0.68rem;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.3s, border-color 0.3s;
+      align-self: flex-start;
+    }
+    .form-btn:hover { background: rgba(232,213,183,0.08); border-color: var(--warm); }
+
+    /* ── FOOTER ──────────────────────────────────── */
+    footer {
+      background: var(--cream);
+      border-top: 1px solid rgba(113,68,36,0.2);
+      padding: 2rem 3.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-logo img { height: 36px; width: auto; opacity: 0.6; }
+    .footer-text {
+      font-size: 0.65rem; letter-spacing: 0.1em;
+      color: var(--brown);
+    }
+
+    /* ── ANIMATIONS ──────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; } to { opacity: 1; }
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity 0.85s ease, transform 0.85s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+    .d1 { transition-delay: 0.12s; }
+    .d2 { transition-delay: 0.24s; }
+    .d3 { transition-delay: 0.36s; }
+
+    /* ── RESPONSIVE ──────────────────────────────── */
+    @media (max-width: 960px) {
+      nav { padding: 1.2rem 1.8rem; }
+      .nav-links { gap: 1.8rem; }
+      section { padding: 5.5rem 1.8rem; }
+      .hero-content { padding: 0 1.8rem 4rem; }
+      .hero-scroll { display: none; }
+      .services-grid { grid-template-columns: 1fr; gap: 0; }
+      .projects-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+      }
+      .proj-1, .proj-2, .proj-3, .proj-accent {
+        grid-column: 1 / -1; grid-row: auto;
+      }
+      .proj-img, .proj-accent .proj-img { min-height: 300px; }
+      #about { grid-template-columns: 1fr; gap: 4rem; }
+      .about-badge { right: 0; bottom: -1.5rem; }
+      #contact { grid-template-columns: 1fr; gap: 4rem; }
+      .work-intro { flex-direction: column; align-items: flex-start; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAV ─────────────────────────────────────── -->
+  <nav id="nav">
+    <a href="#" class="nav-logo">
+      <img src="logo.svg" alt="Seeds" class="logo-light" style="filter: brightness(0) invert(1);" />
+      <img src="logo.svg" alt="Seeds" class="logo-dark" style="filter: brightness(0) saturate(100%) invert(20%) sepia(40%) saturate(600%) hue-rotate(10deg);" />
+    </a>
+    <ul class="nav-links">
+      <li><a href="#services">Studio</a></li>
+      <li><a href="#work">Créations</a></li>
+      <li><a href="#about">À propos</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── HERO ────────────────────────────────────── -->
+  <section id="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+      <p class="hero-label">Food Studio · Paris</p>
+      <h1 class="hero-title">
+        Cuisiner,<br>
+        <em>émouvoir,</em><br>
+        partager.
+      </h1>
+      <p class="hero-sub">
+        Cooking &amp; baking, expériences culinaires, événements privés
+        et set design — par Yonith Benhamou.
+      </p>
+      <a href="#work" class="hero-cta">
+        Découvrir les créations
+        <svg width="16" height="10" viewBox="0 0 16 10" fill="none">
+          <path d="M1 5h14M10 1l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <div class="hero-scroll">
+      <span>Scroll</span>
+      <div class="hero-scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ── MARQUEE ─────────────────────────────────── -->
+  <div class="marquee-wrap" aria-hidden="true">
+    <div class="marquee-track">
+      <span class="marquee-item">Cooking &amp; Baking</span>
+      <span class="marquee-item">Expériences culinaires</span>
+      <span class="marquee-item">Événements privés</span>
+      <span class="marquee-item">Set Design</span>
+      <span class="marquee-item">Table privée</span>
+      <span class="marquee-item">Pâtisserie d'auteur</span>
+      <span class="marquee-item">Cooking &amp; Baking</span>
+      <span class="marquee-item">Expériences culinaires</span>
+      <span class="marquee-item">Événements privés</span>
+      <span class="marquee-item">Set Design</span>
+      <span class="marquee-item">Table privée</span>
+      <span class="marquee-item">Pâtisserie d'auteur</span>
+    </div>
+  </div>
+
+  <!-- ── SERVICES ────────────────────────────────── -->
+  <section id="services">
+    <div class="services-header reveal">
+      <div class="label">Le studio</div>
+      <h2 class="heading">Un food studio <em>parisien</em><br>pensé pour émouvoir</h2>
+      <p>Seeds est un espace de création culinaire fondé par Yonith Benhamou. Chaque projet naît d'une attention minutieuse aux produits, aux saisons et à la beauté du geste.</p>
+    </div>
+
+    <div class="services-grid">
+      <div class="service-item reveal">
+        <p class="service-num">01</p>
+        <h3 class="service-title">Cooking<br>&amp; Baking</h3>
+        <p class="service-desc">Création de recettes et pâtisseries d'auteur. Des saveurs inattendues, des textures travaillées, une esthétique singulière.</p>
+      </div>
+      <div class="service-item reveal d1">
+        <p class="service-num">02</p>
+        <h3 class="service-title">Expériences<br>culinaires privées</h3>
+        <p class="service-desc">Dîners sur mesure, tables d'hôtes et événements intimistes. De la conception du menu à la mise en scène de la table.</p>
+      </div>
+      <div class="service-item reveal d2">
+        <p class="service-num">03</p>
+        <h3 class="service-title">Set Design<br>culinaire</h3>
+        <p class="service-desc">Scénographie de table, direction artistique food, shootings culinaires. L'assiette comme objet visuel à part entière.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── WORK ────────────────────────────────────── -->
+  <section id="work">
+    <div class="work-intro reveal">
+      <div>
+        <div class="label">Créations</div>
+        <h2 class="heading">Une <em>sélection</em><br>de projets récents</h2>
+      </div>
+      <p>De la pâtisserie sculpturale aux grandes tablées, chaque création raconte une histoire de goût et de sensibilité.</p>
+    </div>
+
+    <div class="projects-grid">
+      <div class="proj proj-1 reveal">
+        <img class="proj-img" src="img-proj1.jpg" alt="Dôme pâtissier" />
+        <div class="proj-overlay">
+          <p class="proj-tag">Pâtisserie</p>
+          <h3 class="proj-title">Dôme à la rose,<br>crème vanille</h3>
+          <a href="#" class="proj-link">
+            <span class="proj-link-line"></span>
+            Voir le projet
+          </a>
+        </div>
+      </div>
+
+      <div class="proj proj-2 reveal d1">
+        <img class="proj-img" src="img-proj2.jpg" alt="Table dressée" />
+        <div class="proj-overlay">
+          <p class="proj-tag">Événementiel · Set Design</p>
+          <h3 class="proj-title">Dîner privé</h3>
+          <a href="#" class="proj-link">
+            <span class="proj-link-line"></span>
+            Voir le projet
+          </a>
+        </div>
+      </div>
+
+      <div class="proj proj-3 reveal">
+        <img class="proj-img" src="img-proj3.jpg" alt="Carnet de recettes" />
+        <div class="proj-overlay">
+          <p class="proj-tag">Conception · Recettes</p>
+          <h3 class="proj-title">Carnet de saison —<br>Tarte chocolat sarrasin</h3>
+          <a href="#" class="proj-link">
+            <span class="proj-link-line"></span>
+            Voir le projet
+          </a>
+        </div>
+      </div>
+
+      <div class="proj proj-accent reveal d1">
+        <div class="proj-overlay">
+          <p class="proj-tag">En ce moment</p>
+          <h3 class="proj-title">Cooking &amp;<br>Baking Studio</h3>
+          <p style="font-size:0.78rem; line-height:1.7; color:rgba(232,213,183,0.65); margin-top:1rem;">
+            Disponible pour vos projets culinaires, événements et collaborations créatives.
+          </p>
+          <a href="#contact" class="proj-link" style="opacity:1;transform:none;margin-top:1.5rem;">
+            <span class="proj-link-line"></span>
+            Travailler ensemble
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── ABOUT ───────────────────────────────────── -->
+  <section id="about">
+    <div class="about-visual reveal">
+      <img class="about-img" src="img-about.jpg" alt="Yonith Benhamou" />
+      <div class="about-badge">
+        "La cuisine comme<br>langage universel<br>et comme art."
+      </div>
+    </div>
+
+    <div class="about-text">
+      <div class="label reveal">À propos</div>
+      <h2 class="heading reveal d1">Yonith<br>Benhamou</h2>
+
+      <p class="about-body reveal d2">
+        Fondatrice de Seeds, Yonith Benhamou est cheffe et créatrice culinaire basée à Paris. Son studio est un espace de recherche et de création où la cuisine devient expérience sensorielle totale.
+      </p>
+      <p class="about-body reveal d2">
+        Cooking &amp; baking, expériences culinaires sur mesure, événements privés, set design — Seeds accompagne chaque projet avec une attention singulière portée aux détails, aux saisons et à l'émotion.
+      </p>
+
+      <div class="skills reveal d3">
+        <div class="skill">Cuisine créative</div>
+        <div class="skill">Pâtisserie d'auteur</div>
+        <div class="skill">Événements privés</div>
+        <div class="skill">Set design culinaire</div>
+        <div class="skill">Direction artistique</div>
+        <div class="skill">Ateliers &amp; workshops</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONTACT ────────────────────────────────── -->
+  <section id="contact">
+    <div>
+      <div class="label reveal">Contact</div>
+      <h2 class="heading reveal d1">Travaillons<br><em>ensemble</em></h2>
+      <p class="contact-body reveal d2">
+        Vous avez un projet, un événement à célébrer, une idée à explorer ? Seeds est disponible pour des collaborations en France et à l'international.
+      </p>
+      <div class="contact-links reveal d3">
+        <a href="mailto:yonith@seeds.paris" class="contact-link">
+          <span class="contact-link-line"></span>
+          yonith@seeds.paris
+        </a>
+        <a href="https://www.instagram.com/seeds.paris/?hl=en" class="contact-link" target="_blank">
+          <span class="contact-link-line"></span>
+          Instagram — @seeds.paris
+        </a>
+        <a href="#" class="contact-link">
+          <span class="contact-link-line"></span>
+          Paris, France
+        </a>
+      </div>
+    </div>
+
+    <form class="contact-form reveal d1" id="contactForm" action="https://formspree.io/f/TON_FORM_ID" method="POST">
+      <div class="form-field">
+        <label class="form-label" for="name">Votre nom</label>
+        <input class="form-input" id="name" type="text" placeholder="Marie Dupont" />
+      </div>
+      <div class="form-field">
+        <label class="form-label" for="email">Email</label>
+        <input class="form-input" id="email" type="email" placeholder="marie@exemple.fr" />
+      </div>
+      <div class="form-field">
+        <label class="form-label" for="project">Type de projet</label>
+        <input class="form-input" id="project" type="text" placeholder="Dîner privé, collaboration, atelier…" />
+      </div>
+      <div class="form-field">
+        <label class="form-label" for="message">Message</label>
+        <textarea class="form-textarea" id="message" rows="4" placeholder="Décrivez votre projet…"></textarea>
+      </div>
+      <button class="form-btn" type="submit">
+        Envoyer
+        <svg width="14" height="10" viewBox="0 0 14 10" fill="none">
+          <path d="M1 5h12M8 1l4 4-4 4" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </form>
+  </section>
+
+  <!-- ── FOOTER ─────────────────────────────────── -->
+  <footer>
+    <a href="#" class="footer-logo">
+      <img src="logo.svg" alt="Seeds" style="filter: brightness(0) saturate(100%) invert(20%) sepia(40%) saturate(600%) hue-rotate(10deg);" />
+    </a>
+    <span class="footer-text">© 2026 Seeds — Food Studio Paris. Tous droits réservés.</span>
+    <span class="footer-text">by Yonith Benhamou &nbsp;·&nbsp; Photos © Fanny Petit</span>
+  </footer>
+
+  <script>
+    // Hero image load animation
+    const heroBg = document.getElementById('heroBg');
+    const img = new Image();
+    img.src = 'img-hero.jpg';
+    img.onload = () => heroBg.classList.add('loaded');
+
+    // Nav scroll
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // Scroll reveal
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Contact form → Formspree AJAX
+    const form = document.getElementById('contactForm');
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const btn = form.querySelector('.form-btn');
+      btn.textContent = 'Envoi en cours…';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+          form.innerHTML = '<p style="font-family:var(--serif);font-style:italic;font-size:1.2rem;color:var(--cream);line-height:1.7;padding-top:1rem;">Merci pour votre message.<br>Yonith vous répondra très vite.</p>';
+        } else {
+          btn.textContent = 'Erreur — réessayez';
+          btn.disabled = false;
+        }
+      } catch {
+        btn.textContent = 'Erreur — réessayez';
+        btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
