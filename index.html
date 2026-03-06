@@ -48,7 +48,7 @@
       position: fixed; top: 0; left: 0; right: 0;
       z-index: 100;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0.8rem 3.5rem;
+      padding: 0.5rem 3.5rem;
       background: rgba(242,235,217,0.95);
       backdrop-filter: blur(14px);
       border-bottom: 1px solid rgba(113,68,36,0.12);
@@ -61,12 +61,13 @@
     .nav-logo {
       display: block; line-height: 0; text-decoration: none;
     }
-    .nav-logo { position: relative; width: 90px; height: 90px; display: block; line-height: 0; text-decoration: none; }
+    .nav-logo { position: relative; width: 120px; height: 44px; display: block; line-height: 0; text-decoration: none; overflow: hidden; }
     .nav-logo img {
-      height: 90px; width: auto;
-      transition: opacity 0.4s;
+      width: 120px; height: auto;
       position: absolute;
-      top: 0; left: 0;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      transition: opacity 0.4s;
     }
     .nav-logo img.logo-light { opacity: 0; }
     .nav-logo img.logo-dark  { opacity: 1; }
