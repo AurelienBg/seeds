@@ -263,22 +263,29 @@
     .services-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: rgba(113,68,36,0.12);
+      gap: 1.5rem;
     }
     .service-item {
       background: var(--cream);
-      padding: 3rem 2.5rem;
+      overflow: hidden;
       transition: background 0.3s;
     }
     .service-item:hover { background: var(--white); }
+    .service-img {
+      width: 100%; aspect-ratio: 4/3;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s cubic-bezier(.25,.46,.45,.94);
+    }
+    .service-item:hover .service-img { transform: scale(1.04); }
+    .service-body { padding: 2rem 2rem 2.5rem; }
 
     .service-num {
       font-family: var(--serif);
       font-size: 0.8rem;
       color: var(--rust);
       letter-spacing: 0.1em;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
     }
     .service-title {
       font-family: var(--serif);
@@ -538,12 +545,15 @@
 
     /* ── RESPONSIVE ──────────────────────────────── */
     @media (max-width: 960px) {
-      nav { padding: 1.2rem 1.8rem; }
-      .nav-links { gap: 1.8rem; }
+      nav { padding: 0.5rem 1.2rem; }
+      .nav-links { gap: 1.4rem; }
+      .nav-links a { font-size: 0.6rem; letter-spacing: 0.12em; }
+      .nav-logo { width: 48px; height: 48px; overflow: visible; }
+      .nav-logo img { width: 48px; height: 48px; top: 0; left: 0; transform: none; }
       section { padding: 5.5rem 1.8rem; }
       .hero-content { padding: 0 1.8rem 4rem; }
       .hero-scroll { display: none; }
-      .services-grid { grid-template-columns: 1fr; gap: 0; }
+      .services-grid { grid-template-columns: 1fr; gap: 1rem; }
       .projects-grid {
         grid-template-columns: 1fr;
         grid-template-rows: auto;
@@ -557,6 +567,13 @@
       #contact { grid-template-columns: 1fr; gap: 4rem; }
       .work-intro { flex-direction: column; align-items: flex-start; }
       footer { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+
+    @media (max-width: 480px) {
+      .nav-links { gap: 0.9rem; }
+      .nav-links a { font-size: 0.52rem; letter-spacing: 0.08em; }
+      .nav-logo { width: 38px; height: 38px; }
+      .nav-logo img { width: 38px; height: 38px; }
     }
   </style>
 </head>
@@ -590,7 +607,7 @@
       </h1>
       <p class="hero-sub">
         Cooking &amp; baking, expériences culinaires, événements privés
-        et set design — par Yonith Benhamou.
+        et set design — par Yonith Benhamou. Produits locaux, saisons respectées, chaque menu naît du marché.
       </p>
       <a href="#work" class="hero-cta">
         Découvrir les créations
@@ -634,19 +651,28 @@
 
     <div class="services-grid">
       <div class="service-item reveal">
-        <p class="service-num">01</p>
-        <h3 class="service-title">Cooking<br>&amp; Baking</h3>
-        <p class="service-desc">Création de recettes et pâtisseries d'auteur. Des saveurs inattendues, des textures travaillées, une esthétique singulière.</p>
+        <img class="service-img" src="img-service1.jpg" alt="Cooking & Baking" />
+        <div class="service-body">
+          <p class="service-num">01</p>
+          <h3 class="service-title">Cooking<br>&amp; Baking</h3>
+          <p class="service-desc">Création de recettes et pâtisseries d'auteur. Des saveurs inattendues, des textures travaillées, une esthétique singulière.</p>
+        </div>
       </div>
       <div class="service-item reveal d1">
-        <p class="service-num">02</p>
-        <h3 class="service-title">Expériences<br>culinaires privées</h3>
-        <p class="service-desc">Dîners sur mesure, tables d'hôtes et événements intimistes. De la conception du menu à la mise en scène de la table.</p>
+        <img class="service-img" src="img-service2.jpg" alt="Expériences culinaires privées" />
+        <div class="service-body">
+          <p class="service-num">02</p>
+          <h3 class="service-title">Expériences<br>culinaires privées</h3>
+          <p class="service-desc">Dîners sur mesure, tables d'hôtes et événements intimistes. De la conception du menu à la mise en scène de la table. Dîners intimes de 6 à tablées de 80 — vernissages, lancements de marque, fêtes privées.</p>
+        </div>
       </div>
       <div class="service-item reveal d2">
-        <p class="service-num">03</p>
-        <h3 class="service-title">Set Design<br>culinaire</h3>
-        <p class="service-desc">Scénographie de table, direction artistique food, shootings culinaires. L'assiette comme objet visuel à part entière.</p>
+        <img class="service-img" src="img-service3.jpg" alt="Set Design culinaire" />
+        <div class="service-body">
+          <p class="service-num">03</p>
+          <h3 class="service-title">Set Design<br>culinaire</h3>
+          <p class="service-desc">Scénographie de table, direction artistique food, shootings culinaires. L'assiette comme objet visuel à part entière.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -679,10 +705,6 @@
         <div class="proj-overlay">
           <p class="proj-tag">Événementiel · Set Design</p>
           <h3 class="proj-title">Dîner privé</h3>
-          <a href="#" class="proj-link">
-            <span class="proj-link-line"></span>
-            Voir le projet
-          </a>
         </div>
       </div>
 
@@ -729,6 +751,9 @@
 
       <p class="about-body reveal d2">
         Fondatrice de Seeds, Yonith Benhamou est cheffe et créatrice culinaire basée à Paris. Son studio est un espace de recherche et de création où la cuisine devient expérience sensorielle totale.
+      </p>
+      <p class="about-body reveal d2">
+        Chaque création part du produit : des ingrédients locaux, choisis auprès de producteurs de confiance, au fil des saisons. Rien n'est figé — le menu suit le marché, le jardin, le moment.
       </p>
       <p class="about-body reveal d2">
         Cooking &amp; baking, expériences culinaires sur mesure, événements privés, set design — Seeds accompagne chaque projet avec une attention singulière portée aux détails, aux saisons et à l'émotion.
